@@ -27,19 +27,23 @@ def main():
 
     with tab1:
         st.header("Manual Input Prediction")
-        col1, col2 = st.columns(2)
-        with col1:
-            sepal_length = st.number_input("Sepal Length (cm)", min_value=0.0, max_value=10.0, value=5.1)
-            sepal_width = st.number_input("Sepal Width (cm)", min_value=0.0, max_value=10.0, value=3.5)
-        with col2:
-            petal_length = st.number_input("Petal Length (cm)", min_value=0.0, max_value=10.0, value=1.4)
-            petal_width = st.number_input("Petal Width (cm)", min_value=0.0, max_value=10.0, value=0.2)
+        
+        with st.form("prediction_form"):
+            col1, col2 = st.columns(2)
+            with col1:
+                sepal_length = st.number_input("Sepal Length (cm)", min_value=0.0, max_value=10.0, value=5.1)
+                sepal_width = st.number_input("Sepal Width (cm)", min_value=0.0, max_value=10.0, value=3.5)
+            with col2:
+                petal_length = st.number_input("Petal Length (cm)", min_value=0.0, max_value=10.0, value=1.4)
+                petal_width = st.number_input("Petal Width (cm)", min_value=0.0, max_value=10.0, value=0.2)
 
-        if st.button("Predict Species"):
-            features = np.array([[sepal_length, sepal_width, petal_length, petal_width]])
-            features_scaled = scaler.transform(features)
-            prediction = model.predict(features_scaled)
-            st.success(f"The predicted species is: **{prediction[0]}**")
+            submitted = st.form_submit_button("Predict Species")
+            
+            if submitted:
+                features = np.array([[sepal_length, sepal_width, petal_length, petal_width]])
+                features_scaled = scaler.transform(features)
+                prediction = model.predict(features_scaled)
+                st.success(f"The predicted species is: **{prediction[0].upper()}**")
 
     with tab2:
         st.header("Batch Prediction")
